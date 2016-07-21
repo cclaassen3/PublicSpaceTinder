@@ -1,4 +1,4 @@
-public class Location {
+public class Place {
     
     private String name;
     private String address;
@@ -7,7 +7,7 @@ public class Location {
     private String city;
     private String filter; //the type of public space
 
-    public Location(String name, String address, String latitude,
+    public Place(String name, String address, String latitude,
         String longitude, String city, String filter) {
         this.name = name;
         this.address = address;
