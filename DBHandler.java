@@ -1,8 +1,14 @@
-package com.mobilesiri.sqliteexample;
+package gtupchack.publicspacetinder;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.content.ContentValues;
+import android.database.Cursor;
+
+
+import java.util.List;
+import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -29,7 +35,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // Filter table name
     private static final String TABLE_FILTERS = "Filters";
-    
+
     // PlacePics table name
     private static final String TABLE_PLACEPICS = "PlacePics";
     // PlacePics Table Columns names
@@ -37,51 +43,47 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // PlaceList table name
     private static final String TABLE_PLACELIST = "PlaceList";
-    
+
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public DBHandler(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-    
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
-        + KEY_USERNAME + " VARCHAR(25) PRIMARY KEY," + KEY_EMAIL + " VARCHAR(25),"
-        + KEY_ADDRESS + " VARCHAR(25)" + ")";
+                + KEY_USERNAME + " VARCHAR(25) PRIMARY KEY," + KEY_EMAIL + " VARCHAR(25),"
+                + KEY_ADDRESS + " VARCHAR(25)" + ")";
         db.execSQL(CREATE_USER_TABLE);
 
         String CREATE_FILTER_TABLE = "CREATE TABLE " + TABLE_FILTERS + "("
-        + KEY_FILTER + " VARCHAR(25)" + ")";
-        
+                + KEY_FILTER + " VARCHAR(25)" + ")";
+
         db.execSQL(CREATE_FILTER_TABLE);
 
         String CREATE_PLACE_TABLE = "CREATE TABLE " + TABLE_PLACE + "("
-        + KEY_PNAME + " VARCHAR(25)," + KEY_ADDRESS + " VARCHAR(40),"
-        + KEY_LATITUDE + "DOUBLE" + KEY_LONGITUDE + " DOUBLE,"
-        + KEY_CITY + " VARCHAR(25)" + KEY_FILTER + " VARCHAR(25),"
-        + "FOREIGN KEY (" + KEY_FILTER + " REFERENCES Filters(" + KEY_FILTER + "),"
-        + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE + ")" + ")";
+                + KEY_PNAME + " VARCHAR(25)," + KEY_ADDRESS + " VARCHAR(40),"
+                + KEY_LATITUDE + "DOUBLE" + KEY_LONGITUDE + " DOUBLE,"
+                + KEY_CITY + " VARCHAR(25)" + KEY_FILTER + " VARCHAR(25),"
+                + "FOREIGN KEY (" + KEY_FILTER + " REFERENCES Filters(" + KEY_FILTER + "),"
+                + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE + ")" + ")";
         db.execSQL(CREATE_PLACE_TABLE);
 
         String CREATE_PLACEPICS_TABLE = "CREATE TABLE " + TABLE_PLACEPICS + "("
-            + KEY_LATITUDE + " DOUBLE," + KEY_LONGITUDE + " DOUBLE,"
-            + KEY_IMG + " VARCHAR(100),"
-            + "FOREIGN KEY (" + KEY_LATITUDE + " REFERENCES Place(" + KEY_LATITUDE + "),"
-            + "FOREIGN KEY (" + KEY_LONGITUDE + " REFERENCES Place(" + KEY_LONGITUDE + "),"
-            + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE ", " + KEY_IMG + ")" + ")";
+                + KEY_LATITUDE + " DOUBLE," + KEY_LONGITUDE + " DOUBLE,"
+                + KEY_IMG + " VARCHAR(100),"
+                + "FOREIGN KEY (" + KEY_LATITUDE + " REFERENCES Place(" + KEY_LATITUDE + "),"
+                + "FOREIGN KEY (" + KEY_LONGITUDE + " REFERENCES Place(" + KEY_LONGITUDE + "),"
+                + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE + ", " + KEY_IMG + ")" + ")";
         db.execSQL(CREATE_PLACEPICS_TABLE);
 
         String CREATE_PLACELIST_TABLE = "CREATE TABLE " + TABLE_PLACELIST + "("
-            + KEY_LATITUDE + " DOUBLE," + KEY_LONGITUDE + " DOUBLE,"
-            + KEY_USERNAME + " VARCHAR(25),"
-            + "FOREIGN KEY (" + KEY_LATITUDE + " REFERENCES Place(" + KEY_LATITUDE + "),"
-            + "FOREIGN KEY (" + KEY_LONGITUDE + " REFERENCES Place(" + KEY_LONGITUDE + "),"
-            + "FOREIGN KEY (" + KEY_USERNAME + " REFERENCES User(" + KEY_USERNAME + "),"
-            + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE ", " + KEY_USERNAME + ")" + ")";
+                + KEY_LATITUDE + " DOUBLE," + KEY_LONGITUDE + " DOUBLE,"
+                + KEY_USERNAME + " VARCHAR(25),"
+                + "FOREIGN KEY (" + KEY_LATITUDE + " REFERENCES Place(" + KEY_LATITUDE + "),"
+                + "FOREIGN KEY (" + KEY_LONGITUDE + " REFERENCES Place(" + KEY_LONGITUDE + "),"
+                + "FOREIGN KEY (" + KEY_USERNAME + " REFERENCES User(" + KEY_USERNAME + "),"
+                + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE + ", " + KEY_USERNAME + ")" + ")";
         db.execSQL(CREATE_PLACELIST_TABLE);
     }
 
@@ -136,7 +138,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_LATITUDE, placepic.getLatitude()); // Placepic Latitude
         values.put(KEY_LONGITUDE, placepic.getLongitude()); // Placepic Longitude
-        values.put(KEY_IMG, placepic.getImagefile()); // Placepic ImageFile
+        values.put(KEY_IMG, placepic.getImageFile()); // Placepic ImageFile
         // Inserting Row
         db.insert(TABLE_PLACEPICS, null, values);
         db.close(); // Closing database connection
@@ -157,12 +159,12 @@ public class DBHandler extends SQLiteOpenHelper {
     public User getUser(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_USER, new String[] { KEY_USERNAME,
-        KEY_EMAIL, KEY_PASSWORD }, KEY_USERNAME + " =?",
-        new String[] { username }, null, null, null, null);
+                        KEY_EMAIL, KEY_PASSWORD }, KEY_USERNAME + " =?",
+                new String[] { username }, null, null, null, null);
         if (cursor != null)
-        cursor.moveToFirst();
-        User user = new User(cursor.getString(0), cursor.getString(1), 
-            cursor.getString(2));
+            cursor.moveToFirst();
+        User user = new User(cursor.getString(0), cursor.getString(1),
+                cursor.getString(2));
         // return user
         return user;
     }
@@ -170,10 +172,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public Filter getFilter(String filtername) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_FILTERS, new String[] { KEY_FILTER },
-        KEY_FILTER + " =?",
-        new String[] { filtername }, null, null, null, null);
+                KEY_FILTER + " =?",
+                new String[] { filtername }, null, null, null, null);
         if (cursor != null)
-        cursor.moveToFirst();
+            cursor.moveToFirst();
         Filter filter = new Filter(cursor.getString(0));
         // return filter
         return filter;
@@ -182,14 +184,14 @@ public class DBHandler extends SQLiteOpenHelper {
     public Place getPlace(double lat, double lon) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_PLACE, new String[] { KEY_PNAME,
-        KEY_ADDRESS, KEY_LATITUDE, KEY_LONGITUDE, KEY_CITY,
-        KEY_FILTER }, KEY_LATITUDE + " =? AND " + KEY_LONGITUDE + " =?",
-        new String[] { String.valueOf(lat), String.valueOf(lon) }, null, null, null, null);
+                        KEY_ADDRESS, KEY_LATITUDE, KEY_LONGITUDE, KEY_CITY,
+                        KEY_FILTER }, KEY_LATITUDE + " =? AND " + KEY_LONGITUDE + " =?",
+                new String[] { String.valueOf(lat), String.valueOf(lon) }, null, null, null, null);
         if (cursor != null)
-        cursor.moveToFirst();
-        Place place = new Place(cursor.getString(0), cursor.getString(1), 
-            Double.parseDouble(cursor.getString(2)), Double.parseDouble(cursor.getString(3)),
-            cursor.getString(4), cursor.getString(5));
+            cursor.moveToFirst();
+        Place place = new Place(cursor.getString(0), cursor.getString(1),
+                Double.parseDouble(cursor.getString(2)), Double.parseDouble(cursor.getString(3)),
+                cursor.getString(4), cursor.getString(5));
         // return place
         return place;
     }
@@ -197,13 +199,13 @@ public class DBHandler extends SQLiteOpenHelper {
     public PlacePic getPlacePic(double lat, double lon, String imgfile) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_PLACEPICS, new String[] { KEY_LATITUDE,
-        KEY_LONGITUDE, KEY_USERNAME }, KEY_LATITUDE + " =? AND " + KEY_LONGITUDE
-        + " =? AND " + KEY_IMG + " =?",
-        new String[] { lat, lon, imgfile }, null, null, null, null);
+                        KEY_LONGITUDE, KEY_USERNAME }, KEY_LATITUDE + " =? AND " + KEY_LONGITUDE
+                        + " =? AND " + KEY_IMG + " =?",
+                new String[] { String.valueOf(lat), String.valueOf(lon), imgfile }, null, null, null, null);
         if (cursor != null)
-        cursor.moveToFirst();
+            cursor.moveToFirst();
         PlacePic placepic = new PlacePic(Double.parseDouble(cursor.getString(0)),
-            Double.parseDouble(cursor.getString(1)), cursor.getString(2));
+                Double.parseDouble(cursor.getString(1)), cursor.getString(2));
         // return placepic
         return placepic;
     }
@@ -211,13 +213,13 @@ public class DBHandler extends SQLiteOpenHelper {
     public PlaceList getPlaceList(double lat, double lon, String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_PLACEPICS, new String[] { KEY_LATITUDE,
-        KEY_LONGITUDE, KEY_USERNAME }, KEY_LATITUDE + " =? AND " + KEY_LONGITUDE
-        + " =? AND " + KEY_USERNAME + " =?",
-        new String[] { lat, lon, username }, null, null, null, null);
+                        KEY_LONGITUDE, KEY_USERNAME }, KEY_LATITUDE + " =? AND " + KEY_LONGITUDE
+                        + " =? AND " + KEY_USERNAME + " =?",
+                new String[] { String.valueOf(lat), String.valueOf(lon), username }, null, null, null, null);
         if (cursor != null)
-        cursor.moveToFirst();
+            cursor.moveToFirst();
         PlaceList placelist = new PlaceList(Double.parseDouble(cursor.getString(0)),
-            Double.parseDouble(cursor.getString(1)), cursor.getString(2));
+                Double.parseDouble(cursor.getString(1)), cursor.getString(2));
         // return placelist
         return placelist;
     }
@@ -227,7 +229,7 @@ public class DBHandler extends SQLiteOpenHelper {
         List<PlaceList> placelist = new ArrayList<PlaceList>();
         // Select All Query
         String selectQuery = "SELECT * FROM " + TABLE_PLACELIST
-        + " WHERE " + KEY_USERNAME + " = " + username;
+                + " WHERE " + KEY_USERNAME + " = " + username;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
@@ -235,8 +237,8 @@ public class DBHandler extends SQLiteOpenHelper {
             do {
                 PlaceList pl = new PlaceList();
                 pl.setUsername(cursor.getString(0));
-                pl.setLatitude(cursor.getString(1));
-                pl.setLongitude(cursor.getString(2));
+                pl.setLatitude(Double.parseDouble(cursor.getString(1)));
+                pl.setLongitude(Double.parseDouble(cursor.getString(2)));
                 // Adding contact to list
                 placelist.add(pl);
             } while (cursor.moveToNext());
