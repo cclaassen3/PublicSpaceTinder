@@ -222,4 +222,27 @@ public class DBHandler extends SQLiteOpenHelper {
         return placelist;
     }
 
+    // Getting Full PlaceList
+    public List<PlaceList> getFullPlaceList(String username) {
+        List<PlaceList> placelist = new ArrayList<PlaceList>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM " + TABLE_PLACELIST
+        + " WHERE " + KEY_USERNAME + " = " + username;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                PlaceList pl = new PlaceList();
+                pl.setUsername(cursor.getString(0));
+                pl.setLatitude(cursor.getString(1));
+                pl.setLongitude(cursor.getString(2));
+                // Adding contact to list
+                placelist.add(pl);
+            } while (cursor.moveToNext());
+        }
+        // return contact list
+        return placelist;
+    }
+
 }
