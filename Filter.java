@@ -1,5 +1,7 @@
+package gtupchack.publicspacetinder;
+
 public class Filter {
-    
+
     private String filter;
 
     public Filter(String filter) {
@@ -13,4 +15,4 @@ public class Filter {
     public String getFilter() {
         return filter;
     }
-} 
+}
