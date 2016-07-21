@@ -9,4 +9,8 @@ public class Filter {
     public void setFilter(String filter) {
         this.filter = filter;
     }
+
+    public String getFilter() {
+        return filter;
+    }
 } 

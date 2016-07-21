@@ -22,4 +22,16 @@ public class PlaceList {
         this.username = username;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
 }

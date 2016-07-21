@@ -21,4 +21,16 @@ public class PlacePic {
     public void setImageFile(double imageFile) {
         this.imageFile = imageFile;
     }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+    
+    public String getImageFile() {
+        return imageFile;
+    }
 }

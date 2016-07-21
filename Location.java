@@ -40,4 +40,28 @@ public class Location {
     public void setFilter(String string) {
         this.filter = string;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String setCity() {
+        return city;
+    }
+
+    public void getFilter() {
+        return filter;
+    }
 }
