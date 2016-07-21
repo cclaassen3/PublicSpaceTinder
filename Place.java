@@ -1,15 +1,17 @@
+package gtupchack.publicspacetinder;
+
 public class Place {
-    
-    private String name;
+
+    private String pname;
     private String address;
     private double latitude;
     private double longitude;
     private String city;
     private String filter; //the type of public space
 
-    public Place(String name, String address, String latitude,
-        String longitude, String city, String filter) {
-        this.name = name;
+    public Place(String name, String address, double latitude,
+                 double longitude, String city, String filter) {
+        this.pname = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -17,8 +19,8 @@ public class Place {
         this.filter = filter;
     }
 
-    public void setName(String string) {
-        this. = string;
+    public void setPname(String string) {
+        this.pname = string;
     }
 
     public void setAddress(String string) {
@@ -41,8 +43,8 @@ public class Place {
         this.filter = string;
     }
 
-    public String getName() {
-        return name;
+    public String getPname() {
+        return pname;
     }
 
     public String getAddress() {
@@ -57,11 +59,11 @@ public class Place {
         return longitude;
     }
 
-    public String setCity() {
+    public String getCity() {
         return city;
     }
 
-    public void getFilter() {
+    public String getFilter() {
         return filter;
     }
 }
