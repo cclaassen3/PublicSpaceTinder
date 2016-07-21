@@ -106,7 +106,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // Adding new filter
-    public void addUser(Filter filter) {
+    public void addFilter(Filter filter) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_FILTER, filter.getFilter()); // Filter Filter
