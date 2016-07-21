@@ -1,8 +1,14 @@
+package gtupchack.publicspacetinder;
+
 public class PlaceList {
-    
+
     private double latitude;
     private double longitude;
     private String username;
+
+    public PlaceList() {
+
+    }
 
     public PlaceList(double latitude, double longitude, String username) {
         this.latitude = latitude;
