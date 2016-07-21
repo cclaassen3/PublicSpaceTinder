@@ -1,4 +1,4 @@
-package com.mobilesiri.sqliteexample;
+package gtupchack.publicspacetinder;
 
 public class User {
     private String username;
@@ -23,7 +23,7 @@ public class User {
         this.password=password;
     }
 
-    public int getUsername() {
+    public String getUsername() {
         return username;
     }
 
