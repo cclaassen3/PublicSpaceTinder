@@ -44,6 +44,11 @@ public class DBHandler extends SQLiteOpenHelper {
     // PlaceList table name
     private static final String TABLE_PLACELIST = "PlaceList";
 
+    // Viewed table name
+    private static final String TABLE_VIEWED = "Seen";
+
+    // Viewed Table Columns names
+    private static final String KEY_VIEWED = "Viewed";
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -52,8 +57,8 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
-                + KEY_USERNAME + " VARCHAR(25) PRIMARY KEY," + KEY_EMAIL + " VARCHAR(25),"
-                + KEY_ADDRESS + " VARCHAR(25)" + ")";
+                + KEY_USERNAME + " VARCHAR(25) PRIMARY KEY," + KEY_EMAIL
+                + " VARCHAR(25) UNIQUE," + KEY_ADDRESS + " VARCHAR(25)" + ")";
         db.execSQL(CREATE_USER_TABLE);
 
         String CREATE_FILTER_TABLE = "CREATE TABLE " + TABLE_FILTERS + "("
@@ -85,6 +90,15 @@ public class DBHandler extends SQLiteOpenHelper {
                 + "FOREIGN KEY (" + KEY_USERNAME + ") REFERENCES User(" + KEY_USERNAME + "),"
                 + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE + ", " + KEY_USERNAME + ")" + ")";
         db.execSQL(CREATE_PLACELIST_TABLE);
+
+        String CREATE_VIEWED_TABLE = "CREATE TABLE " + TABLE_VIEWED + "("
+                + KEY_LATITUDE + " DOUBLE," + KEY_LONGITUDE + " DOUBLE,"
+                + KEY_USERNAME + " VARCHAR(25)," + KEY_VIEWED + " TINYINT(1) DEFAULT = 0,"
+                + "FOREIGN KEY (" + KEY_LATITUDE + ") REFERENCES Place(" + KEY_LATITUDE + "),"
+                + "FOREIGN KEY (" + KEY_LONGITUDE + ") REFERENCES Place(" + KEY_LONGITUDE + "),"
+                + "FOREIGN KEY (" + KEY_USERNAME + ") REFERENCES User(" + KEY_USERNAME + "),"
+                + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE + ", " + KEY_USERNAME + ")" + ")";
+        db.execSQL(CREATE_VIEWED_TABLE);
     }
 
     @Override
@@ -224,6 +238,21 @@ public class DBHandler extends SQLiteOpenHelper {
         return placelist;
     }
 
+    // Updating viewed
+    public int updateViewed(Viewed wasviewed) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_LATITUDE, wasviewed.getLatitude()); // Viewed Latitude
+        values.put(KEY_LONGITUDE, wasviewed.getLongitude()); // Viewed Longitude
+        values.put(KEY_USERNAME, wasviewed.getUsername()); // Viewed Username
+        values.put(KEY_VIEWED, wasviewed.getSeen()); // Viewed seen
+        // updating row
+        return db.update(TABLE_VIEWED, values, KEY_LATITUDE + " = ? AND "
+            + KEY_LONGITUDE + " = ? AND " + KEY_USERNAME + " = ?",
+            new String[]{String.valueOf(wasviewed.getLatitude()), 
+            String.valueOf(wasviewed.getLongitude()), String.valueOf(wasviewed.getUsername())});
+    }
+
     // Getting Full PlaceList
     public List<PlaceList> getFullPlaceList(String username) {
         List<PlaceList> placelist = new ArrayList<PlaceList>();
@@ -245,6 +274,37 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         // return contact list
         return placelist;
+    }
+
+    // Getting Full PlaceList
+    public List<Place> getNotViewed(String username) {
+        List<Place> nvplaces = new ArrayList<Place>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM " + TABLE_PLACE + ", " + TABLE_VIEWED
+                + " WHERE " + TABLE_VIEWED + "." + KEY_USERNAME + " = " + username
+                + " AND " + TABLE_PLACE + "." + KEY_LATITUDE
+                + " = " TABLE_VIEWED + "." + KEY_LATITUDE + " AND "
+                + TABLE_PLACE + "." + KEY_LONGITUDE
+                + " = " TABLE_VIEWED + "." + KEY_LONGITUDE + " AND "
+                + TABLE_VIEWED + "." + KEY_VIEWED + " = 0";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Place pl = new Place();
+                pl.setPname(cursor.getString(0));
+                pl.setAddress(cursor.getString(1));
+                pl.setLatitude(Double.parseDouble(cursor.getString(2)));
+                pl.setLongitude(Double.parseDouble(cursor.getString(3)));
+                pl.setCity(cursor.getString(4));
+                pl.setFilter(cursor.getString(5));
+                // Adding contact to list
+                nvplaces.add(pl);
+            } while (cursor.moveToNext());
+        }
+        // return contact list
+        return nvplaces;
     }
 
 }
