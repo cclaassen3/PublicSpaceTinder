@@ -63,26 +63,26 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String CREATE_PLACE_TABLE = "CREATE TABLE " + TABLE_PLACE + "("
                 + KEY_PNAME + " VARCHAR(25)," + KEY_ADDRESS + " VARCHAR(40),"
-                + KEY_LATITUDE + "DOUBLE" + KEY_LONGITUDE + " DOUBLE,"
-                + KEY_CITY + " VARCHAR(25)" + KEY_FILTER + " VARCHAR(25),"
-                + "FOREIGN KEY (" + KEY_FILTER + " REFERENCES Filters(" + KEY_FILTER + "),"
-                + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE + ")" + ")";
+                + KEY_LATITUDE + " DOUBLE," + KEY_LONGITUDE + " DOUBLE,"
+                + KEY_CITY + " VARCHAR(25)," + KEY_FILTER + " VARCHAR(25),"
+                + " FOREIGN KEY (" + KEY_FILTER + ") REFERENCES Filters(" + KEY_FILTER + "),"
+                + " PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE + ")" + ")";
         db.execSQL(CREATE_PLACE_TABLE);
 
         String CREATE_PLACEPICS_TABLE = "CREATE TABLE " + TABLE_PLACEPICS + "("
                 + KEY_LATITUDE + " DOUBLE," + KEY_LONGITUDE + " DOUBLE,"
                 + KEY_IMG + " VARCHAR(100),"
-                + "FOREIGN KEY (" + KEY_LATITUDE + " REFERENCES Place(" + KEY_LATITUDE + "),"
-                + "FOREIGN KEY (" + KEY_LONGITUDE + " REFERENCES Place(" + KEY_LONGITUDE + "),"
+                + "FOREIGN KEY (" + KEY_LATITUDE + ") REFERENCES Place(" + KEY_LATITUDE + "),"
+                + "FOREIGN KEY (" + KEY_LONGITUDE + ") REFERENCES Place(" + KEY_LONGITUDE + "),"
                 + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE + ", " + KEY_IMG + ")" + ")";
         db.execSQL(CREATE_PLACEPICS_TABLE);
 
         String CREATE_PLACELIST_TABLE = "CREATE TABLE " + TABLE_PLACELIST + "("
                 + KEY_LATITUDE + " DOUBLE," + KEY_LONGITUDE + " DOUBLE,"
                 + KEY_USERNAME + " VARCHAR(25),"
-                + "FOREIGN KEY (" + KEY_LATITUDE + " REFERENCES Place(" + KEY_LATITUDE + "),"
-                + "FOREIGN KEY (" + KEY_LONGITUDE + " REFERENCES Place(" + KEY_LONGITUDE + "),"
-                + "FOREIGN KEY (" + KEY_USERNAME + " REFERENCES User(" + KEY_USERNAME + "),"
+                + "FOREIGN KEY (" + KEY_LATITUDE + ") REFERENCES Place(" + KEY_LATITUDE + "),"
+                + "FOREIGN KEY (" + KEY_LONGITUDE + ") REFERENCES Place(" + KEY_LONGITUDE + "),"
+                + "FOREIGN KEY (" + KEY_USERNAME + ") REFERENCES User(" + KEY_USERNAME + "),"
                 + "PRIMARY KEY (" + KEY_LATITUDE + ", " + KEY_LONGITUDE + ", " + KEY_USERNAME + ")" + ")";
         db.execSQL(CREATE_PLACELIST_TABLE);
     }
