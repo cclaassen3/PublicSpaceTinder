@@ -9,6 +9,10 @@ public class Place {
     private String city;
     private String filter; //the type of public space
 
+    public Place() {
+
+    }
+
     public Place(String name, String address, double latitude,
                  double longitude, String city, String filter) {
         this.pname = name;
